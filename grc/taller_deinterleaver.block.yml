@@ -1,0 +1,21 @@
+id: taller_deinterleaver
+label: deinterleaver
+category: '[Taller]'
+templates:
+  imports: import taller
+  make: taller.deinterleaver(${orden})
+parameters:
+- id: orden
+  label: Orden
+  dtype: int_vector
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: ${ len(orden) }
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  vlen: ${ len(orden) }
+file_format: 1
