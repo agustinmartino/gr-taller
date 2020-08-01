@@ -33,7 +33,7 @@ if(NOT taller_sources)
 endif(NOT taller_sources)
 
 add_library(gnuradio-taller SHARED ${taller_sources})
-target_link_libraries(gnuradio-taller gnuradio::gnuradio-runtime)
+target_link_libraries(gnuradio-taller gnuradio::gnuradio-runtime gnuradio::gnuradio-blocks gnuradio::gnuradio-fft gnuradio::gnuradio-filter Volk::volk)
 target_include_directories(gnuradio-taller
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     PUBLIC $<INSTALL_INTERFACE:include>

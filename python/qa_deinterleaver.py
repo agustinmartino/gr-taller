@@ -48,8 +48,8 @@ class qa_deinterleaver(gr_unittest.TestCase):
 
         my_data = self.blocks_vector_sink_x_0.data()
         for kk in range(len(self.orden)):
-            print(kk, " ", my_data[kk])
-            self.assertEqual(my_data[kk],self.orden[kk])
+            #print(kk, " ", my_data[kk])
+            self.assertEqual(my_data[self.orden[kk]],kk)
                 
 
 

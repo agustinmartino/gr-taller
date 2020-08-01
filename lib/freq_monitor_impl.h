@@ -24,6 +24,7 @@
 #include <taller/freq_monitor.h>
 
 #include <gnuradio/fft/fft.h>
+#include <gnuradio/fft/fft_shift.h>
 #include <gnuradio/filter/firdes.h>
 #include <volk/volk.h>
 
@@ -34,9 +35,13 @@ namespace gr {
     {
      private:
       int d_fftsize;
+      fft::fft_shift<float> *d_fft_shift;      
       fft::fft_complex* d_fft;
       filter::firdes::win_type d_wintype;
       std::vector<float> d_window;
+      float *spectrum_pwr;
+      gr_complex *fft_input;
+      std::vector<float> get_data;      
 
       void buildwindow();
       void psd(float* psd_out, const gr_complex* data_in, int size);
@@ -51,6 +56,8 @@ namespace gr {
               gr_vector_const_void_star &input_items,
               gr_vector_void_star &output_items
       );
+
+      std::vector<float> get_spectrum ();
     };
 
   } // namespace taller

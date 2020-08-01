@@ -46,6 +46,7 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(int fft_size, int wintype);
+      virtual std::vector<float> get_spectrum() = 0;      
     };
 
   } // namespace taller

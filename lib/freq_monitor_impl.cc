@@ -47,7 +47,12 @@ namespace gr {
       d_fftsize = fft_size;
       d_wintype = (filter::firdes::win_type) wintype;
       d_fft = new fft::fft_complex(d_fftsize, true);
+      d_fft_shift = new fft::fft_shift<float>(fft_size);
       buildwindow();
+
+      fft_input = (gr_complex*)volk_malloc(fft_size * sizeof(gr_complex), volk_get_alignment());
+      spectrum_pwr = (float*)volk_malloc(fft_size * sizeof(float), volk_get_alignment());
+      memset(spectrum_pwr, 0, fft_size * sizeof(float));      
     }
 
     /*
@@ -65,7 +70,14 @@ namespace gr {
     {
       const gr_complex *in = (const gr_complex *) input_items[0];
 
-      // Do <+signal processing+>
+      for(int kk=0; kk<noutput_items; kk++)
+      {
+        memcpy(fft_input, &in[kk*d_fftsize], sizeof(gr_complex) * d_fftsize);        
+        psd(spectrum_pwr, fft_input, d_fftsize);
+      }
+      
+      // for(int ll=0; ll<d_fftsize; ll++)
+      //   std::cout << spectrum_pwr[ll] << " ";      
 
       // Tell runtime system how many output items we produced.
       return noutput_items;
@@ -92,8 +104,16 @@ namespace gr {
       volk_32fc_s32f_x2_power_spectral_density_32f(
         psd_out, d_fft->get_outbuf(), size, 1.0, size);
 
-      //d_fft_shift.shift(psd_out, size);
-    }        
+      d_fft_shift->shift(psd_out, size);
+    }
+
+    std::vector<float> freq_monitor_impl::get_spectrum()
+    {
+      get_data.clear();
+      for(int kk=0; kk<d_fftsize; kk++)
+        get_data.push_back(spectrum_pwr[kk]);
+      return get_data;
+    }
 
   } /* namespace taller */
 } /* namespace gr */

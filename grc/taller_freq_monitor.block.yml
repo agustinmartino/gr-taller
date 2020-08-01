@@ -1,0 +1,19 @@
+id: taller_freq_monitor
+label: freq monitor
+category: '[Taller]'
+templates:
+  imports: import taller
+  make: taller.freq_monitor(${fft_size}, ${wintype})
+parameters:
+- id: fft_size
+  label: Fft_size
+  dtype: int
+- id: wintype
+  label: Wintype
+  dtype: int
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: ${ fft_size }
+file_format: 1
